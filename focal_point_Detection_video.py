@@ -7,9 +7,18 @@ detector = dlib.get_frontal_face_detector()
 
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 cap = cv2.VideoCapture(0)
-hat = Image.open('graduation_hat.png') #cv2.imread('graduation_hat.png')
+#hat = Image.open('graduation_hat.png') #cv2.imread('graduation_hat.png')
+hat = cv2.imread('graduation_hat_image.jpg')
+
+# upper and lower range of HSV
+lower = np.array([6,10,68])
+upper = np.array([30,36,122])
+
+# create kernel for image dilation
+kernel = np.ones((3,3),np.uint8)
+
 # Set initial value of weights
-alpha = 0.4
+#alpha = 0.4
 while True:
 	_, frame = cap.read()
 	print(type(frame))
@@ -30,9 +39,8 @@ while True:
 			frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
 			frame = Image.fromarray(frame)
 			frame.paste(np.asarray(hat), (x,y))
-			#cv2.circle(img=frame, center=(x,y), radius=1, color=(0,255,0), thickness=-2)
-
-		cv2.imshow(winname="Face", mat=frame)
+			cv2.circle(img=frame, center=(x,y), radius=1, color=(0,255,0), thickness=-2)
+		cv2.imshow(winname="Face", mat=f)
 	if cv2.waitKey(delay=1) == 27:
 		break
 
